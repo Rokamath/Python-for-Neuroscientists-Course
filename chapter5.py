@@ -416,3 +416,92 @@ from PIL import Image
 #plt.show()
 
 '''Working with Pickled files'''
+'https://docs.python.org/3/library/pickle.html' # Docs
+
+'''some big disadvantages of pickled files: 
+    The pickle module is NOT secure. Only unpickle data you trust.
+    It is Python-only: pickles cannot be loaded in any other programming language (unlike JSON files).'''
+
+'''Reading Pickle files'''
+#with open(file="path/to/the/file.pickle", mode="rb") as file: # rb is Read Binary
+#    output = pickle.load(file=file)
+
+'''Writing Pickle files'''
+#with open(file="path/to/the/file.pickle", mode="wb") as file: # wb is Write Binary
+#    pickle.dump(obj=<object to write>, file=file)
+
+'''Exercise
+Load in the dataset with fMRI data ("exercises/data/fmri_data.csv"). CSV file is separated by ”;“.
+Create a new dictionary frmi with two keys: "parietal" that holds a DataFrame with observations only from the parietal region and "frontal" that holds a DataFrame with observations only from the frontal region.
+Save the resulting dictionary to the pickle file "frmi_dict.pickle".
+Read in back the resulting pickle file and print the first 5 rows of each of the DataFrames in a dictionary.'''
+
+import pickle
+import pandas as pd
+
+# read in the fMRI file
+fmri_df = pd.read_csv("exercises/data/fmri_data.csv",sep=';')
+
+# split into two DataFrames according to the region
+frmi = {
+    "parietal": fmri_df[fmri_df["region"] == "parietal"],
+    "frontal": fmri_df[fmri_df["region"] == "frontal"]
+}
+
+# write the resulting dictionary as pickle file
+with open(file="frmi_dict.pickle", mode="wb") as file:
+    pickle.dump(obj=frmi, file=file)
+
+# read in pickle file
+with open(file="frmi_dict.pickle", mode="rb") as f:
+    output = pickle.load(file=f)
+
+# print out the keys of the loaded dictionary
+#print(output['parietal'].head())
+#print(output['frontal'].head())
+
+'''Local Files'''
+
+text3 = '''
+os.getcwd() - get the current working directory (folder);
+os.chdir(path) - change directory;
+os.listdir(path=".") - return the content of a directory. If path is not specified, returns the content of current working directory;
+os.mkdir(path) - create a new directory();
+os.rmdir(path) - remove a directory;
+os.remove(path) - remove a file;
+os.path.join(dirpath, name) - extend the path to the directory/file. '''
+
+#print(text3)
+
+# Parse the text into rows
+lines = text3.strip().split('-')
+headers = lines[0].split('\t')  # Split header by tab
+rows = [line.split('\t') for line in lines[1:]]  # Split each row by tab
+
+# Generate and print the table
+print(tabulate(rows, headers=headers, tablefmt="grid"))
+
+
+import os
+
+# get the current working directory and save it to a variable
+cwd = os.getcwd()
+print(f"Initial CWD: {cwd}")
+
+path_to_data = 'exercises/data'
+# extend the current path with "path_to_data" part
+new_cwd = os.path.join(cwd, path_to_data)
+# change the CWD to new_cwd
+os.chdir(new_cwd)
+print(f"Changing CWD to {new_cwd}")
+
+# get the file names of a CWD
+fnames = os.listdir()
+
+# calculate how many CSV files are there in CWD
+n_csv = 0
+for file_name in fnames:
+    if file_name.endswith(".csv"):
+        n_csv += 1
+
+#print(f"There are {n_csv} CSV files in {new_cwd} directory.")
