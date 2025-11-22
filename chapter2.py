@@ -238,7 +238,7 @@ result = list(filter(greater_than_two, stdev)) #  Filters the given iterable obj
 
 # Lambda Functions
 # lambda arguments: expression
-
+    
 result1 = list(map(lambda x: x**2, stdev)) # No name function TEMP
 result2 = list(filter(lambda x: x>2, stdev)) # No name function TEMP 
 
